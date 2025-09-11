@@ -37,7 +37,7 @@ public class JavaExpressApplication {
 
 
         Encomenda encomendaCarlos = encomendaService.criarEncomenda("BR011",
-                "Moscou Russia", "Manaus, Brasil",
+                "Helsinque, Finlândia", "Manaus, Brasil",
                 LocalDate.of(2026, 06,26));
 
         clienteService.adicionarEncomenda(andre, encomendaAndre);
@@ -49,8 +49,8 @@ public class JavaExpressApplication {
                 "Ta atrasado omi");
 
         //carlos reclama
-        Reclamacao reclamacaoCarlos = reclamacaoService.criarReclamacao(carlos, encomendaCarlos, TipoReclamacao.DANIFICADA,
-                "ta amassado essa bomba ae");
+        Reclamacao reclamacaoCarlos = reclamacaoService.criarReclamacao(carlos, encomendaCarlos, TipoReclamacao.OUTRO,
+                "Pedi um Iphone 17 e me entregaram um tijolo");
 
         reclamacaoService.registrarFeedback(reclamacaoCarlos, Feedback.OTIMO);
     }

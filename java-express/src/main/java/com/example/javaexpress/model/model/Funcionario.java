@@ -14,10 +14,6 @@ public class Funcionario {
         this.nome = nome;
     }
 
-    public void responderReclamacao(Reclamacao r){
-
-    }
-
     /**
      * GETTERS E SETTERS
      * */
