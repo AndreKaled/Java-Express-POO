@@ -10,11 +10,13 @@ public class Encomenda {
     StatusEncomenda status;
     List<String> historicoRastreio;
     LocalDate dataPrevistaEntrega;
+    Cliente cliente;
 
     public Encomenda() {
     }
 
-    public Encomenda(String codigoRastreio, String origem, String destino, StatusEncomenda status, List<String> historicoRastreio, LocalDate dataPrevistaEntrega) {
+    public Encomenda(String codigoRastreio, String origem, String destino, StatusEncomenda status,
+                     List<String> historicoRastreio, LocalDate dataPrevistaEntrega) {
         this.codigoRastreio = codigoRastreio;
         this.origem = origem;
         this.destino = destino;
@@ -75,5 +77,11 @@ public class Encomenda {
         return dataPrevistaEntrega;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 }
