@@ -24,27 +24,35 @@ public class ClienteService {
         this.reclamacaoService = reclamacaoService;
     }
 
-    public void adicionarCliente(Cliente cliente) {
-        clientes.add(cliente);
-        logger.info("Cliente {} adicionado com sucesso!", cliente.getNome());
-    }
-
-    public Cliente criarCliente(Cliente cliente) {
-        clientes.add(cliente);
+    // CREATE / UPDATE
+    public Cliente save(Cliente cliente) {
+        if(cliente.getIdCliente() == 0){
+            cliente.setIdCliente(nextId++);
+            clientes.add(cliente);
+        }else{
+            int index = clientes.indexOf(cliente);
+            clientes.set(index, cliente);
+        }
         return cliente;
     }
 
-    public Cliente criarCliente(String nome, String email, String senha) {
-        Cliente cliente = new Cliente();
-        cliente.setNome(nome);
-        cliente.setEmail(email);
-        cliente.setSenha(senha);
-        cliente.setListaEncomendas(new ArrayList<>());
-        cliente.setIdCliente(nextId++);
-        clientes.add(cliente);
-        return cliente;
+    // READ
+    public List<Cliente> findAll() {
+        return new ArrayList<>(clientes);
     }
 
+    public Cliente findById(Integer idCliente) {
+        return clientes.stream().filter(cliente -> cliente.getIdCliente() == idCliente)
+                .findFirst()
+                .orElseThrow(() -> new NullPointerException("Cliente nao encontrado"));
+    }
+
+    // DELETE
+    public void deleteById(int id){
+        clientes.removeIf(cliente -> cliente.getIdCliente() == id);
+    }
+
+    // outras coisas coisadas
     public Encomenda consultarEncomenda(String codigoRastreio) {
         logger.info("Consultando encomenda com o código {}...", codigoRastreio);
         return encomendaService.buscaPorCodigoRastreio(codigoRastreio);
