@@ -2,8 +2,8 @@ package com.example.javaexpress.model.model;
 
 public class Funcionario {
     int idFuncionario;
-    String nome;
-    String cargo;
+    private String nome;
+    private String cargo;
 
     public Funcionario() {
     }

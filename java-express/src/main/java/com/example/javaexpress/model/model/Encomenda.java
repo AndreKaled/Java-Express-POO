@@ -4,13 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Encomenda {
-    String codigoRastreio;
-    String origem;
-    String destino;
-    StatusEncomenda status;
-    List<String> historicoRastreio;
-    LocalDate dataPrevistaEntrega;
-    Cliente cliente;
+    private String codigoRastreio;
+    private String origem;
+    private String destino;
+    private StatusEncomenda status;
+    private List<String> historicoRastreio;
+    private LocalDate dataPrevistaEntrega;
+    private Cliente cliente;
 
     public Encomenda() {
     }
