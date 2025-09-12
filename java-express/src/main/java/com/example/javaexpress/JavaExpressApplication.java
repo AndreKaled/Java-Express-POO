@@ -15,13 +15,10 @@ public class JavaExpressApplication {
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(JavaExpressApplication.class, args);
-
         System.out.println("iniciando");
-
         ClienteService clienteService = context.getBean(ClienteService.class);
         EncomendaService encomendaService = context.getBean(EncomendaService.class);
         ReclamacaoService reclamacaoService = context.getBean(ReclamacaoService.class);
-
         Cliente andre = clienteService.criarCliente("andré", "andre.andrade@icomp.ufam.edu.br",
                 "123");
         Cliente carlos = clienteService.criarCliente("carlos", "carlos@icomp.ufam.edu.br",
@@ -30,16 +27,12 @@ public class JavaExpressApplication {
         Encomenda encomendaAndre = encomendaService.criarEncomenda("BR001",
                 "Berlim, Alemanha", "Manaus, Brasil",
                 LocalDate.of(2021, 06,26));
-
         Encomenda encomendaAndre2 = encomendaService.criarEncomenda("BR010",
                 "Berlim, Alemanha", "Manaus, Brasil",
                 LocalDate.of(2026, 06,26));
-
-
         Encomenda encomendaCarlos = encomendaService.criarEncomenda("BR011",
                 "Helsinque, Finlândia", "Manaus, Brasil",
                 LocalDate.of(2026, 06,26));
-
         clienteService.adicionarEncomenda(andre, encomendaAndre);
         clienteService.adicionarEncomenda(andre, encomendaAndre2);
         clienteService.adicionarEncomenda(carlos, encomendaCarlos);
