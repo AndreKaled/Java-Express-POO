@@ -83,7 +83,7 @@ public class ReclamacaoService {
     public void adicionarDescricao(Reclamacao reclamacao, String descricao){
         if(reclamacao != null){
             reclamacao.setDescricao(descricao);
-            logger.info("Descricao adicionada para a reclamacao #{}", reclamacao.getDescricao());
+            logger.info("Descricao adicionada para a reclamacao #{}: {}", reclamacao.getIdReclamacao(), reclamacao.getDescricao());
         }
     }
 
