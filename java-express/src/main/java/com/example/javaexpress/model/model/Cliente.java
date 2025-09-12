@@ -3,11 +3,11 @@ package com.example.javaexpress.model.model;
 import java.util.List;
 
 public class Cliente {
-    int idCliente;
-    String email;
-    String nome;
-    String senha;
-    List<Encomenda> listaEncomendas;
+    private int idCliente;
+    private String email;
+    private String nome;
+    private String senha;
+    private List<Encomenda> listaEncomendas;
 
     public Cliente() {
     }
