@@ -1,7 +1,7 @@
 package com.example.javaexpress.model.model;
 
 public class Funcionario {
-    int idFuncionario;
+    private int idFuncionario;
     private String nome;
     private String cargo;
 
