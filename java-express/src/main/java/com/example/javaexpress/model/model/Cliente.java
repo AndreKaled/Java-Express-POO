@@ -1,6 +1,8 @@
 package com.example.javaexpress.model.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Cliente {
     private int idCliente;
@@ -10,6 +12,7 @@ public class Cliente {
     private List<Encomenda> listaEncomendas;
 
     public Cliente() {
+        listaEncomendas = new ArrayList<>();
     }
 
     public Cliente(int idCliente, String email, String nome, String senha, List<Encomenda> listaEncomendas) {
@@ -62,5 +65,24 @@ public class Cliente {
 
     public void setListaEncomendas(List<Encomenda> listaEncomendas) {
         this.listaEncomendas = listaEncomendas;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "idCliente=" + idCliente +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return idCliente == cliente.idCliente;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idCliente);
     }
 }

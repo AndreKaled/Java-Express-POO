@@ -19,10 +19,16 @@ public class JavaExpressApplication {
         ClienteService clienteService = context.getBean(ClienteService.class);
         EncomendaService encomendaService = context.getBean(EncomendaService.class);
         ReclamacaoService reclamacaoService = context.getBean(ReclamacaoService.class);
-        Cliente andre = clienteService.criarCliente("andré", "andre.andrade@icomp.ufam.edu.br",
-                "123");
-        Cliente carlos = clienteService.criarCliente("carlos", "carlos@icomp.ufam.edu.br",
-                "321");
+        Cliente andre = new Cliente();
+        andre.setNome("andré");
+        andre.setEmail("andre.andrade@icomp.ufam.edu.br");
+        andre.setSenha("123");
+        andre = clienteService.save(andre);
+        Cliente carlos = new Cliente();
+        carlos.setNome("carlos");
+        carlos.setEmail("carlos@icomp.ufam.edu.br");
+        carlos.setSenha("321");
+        carlos = clienteService.save(carlos);
 
         Encomenda encomendaAndre = encomendaService.criarEncomenda("BR001",
                 "Berlim, Alemanha", "Manaus, Brasil",
