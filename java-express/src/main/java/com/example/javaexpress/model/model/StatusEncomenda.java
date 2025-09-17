@@ -1,15 +1,15 @@
 package com.example.javaexpress.model.model;
 
 public enum StatusEncomenda {
-    ENTREGUE(0),
-    ENVIADO(1),
-    EM_ROTA(2);
+    ENTREGUE("ENTREGUE"),
+    ENVIADO("ENVIADO"),
+    EM_ROTA("EM ROTA"),;
 
-    private int status;
+    private String status;
 
-    StatusEncomenda(int status){
+    StatusEncomenda(String status){
         this.status = status;
     }
 
-    public int getStatus(){return status;}
+    public String getStatus(){return status;}
 }

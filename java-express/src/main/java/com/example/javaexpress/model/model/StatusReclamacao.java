@@ -1,17 +1,17 @@
 package com.example.javaexpress.model.model;
 
 public enum StatusReclamacao {
-    ABERTA(0),
-    EM_ANALISE(1),
-    RESOLVIDA(2),
-    RECUSADA(3);
+    ABERTA("ABERTA"),
+    EM_ANALISE("EM ANALISE"),
+    RESOLVIDA("RESOLVIDA"),
+    RECUSADA("RECUSADA");
     
-    int statusReclamacao;
-    StatusReclamacao(int statusReclamacao) {
+    String statusReclamacao;
+    StatusReclamacao(String statusReclamacao) {
         this.statusReclamacao = statusReclamacao;
     }
 
-    public int getStatusReclamacao() {
+    public String getStatusReclamacao() {
         return statusReclamacao;
     }
 }
