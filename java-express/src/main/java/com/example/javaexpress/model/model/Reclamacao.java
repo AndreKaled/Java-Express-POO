@@ -26,6 +26,21 @@ public class Reclamacao {
         this.feedback = feedback;
     }
 
+    public void marcarComoEmAnalise(){
+        if(StatusReclamacao.ABERTA.equals(this.statusReclamacao))
+            setStatusReclamacao(StatusReclamacao.EM_ANALISE);
+    }
+
+    public void marcarComoResolvida(){
+        if(StatusReclamacao.EM_ANALISE.equals(this.statusReclamacao))
+            setStatusReclamacao(StatusReclamacao.RESOLVIDA);
+    }
+
+    public void registrarFeedback(Feedback feedback){
+        if(feedback != null)
+            setFeedback(feedback);
+    }
+
     /**
      * GETTERS E SETTERS
      * */

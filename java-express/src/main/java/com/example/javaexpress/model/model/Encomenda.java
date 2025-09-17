@@ -1,6 +1,7 @@
 package com.example.javaexpress.model.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Encomenda {
@@ -23,6 +24,24 @@ public class Encomenda {
         this.status = status;
         this.historicoRastreio = historicoRastreio;
         this.dataPrevistaEntrega = dataPrevistaEntrega;
+    }
+
+    public void atualizarStatus(StatusEncomenda novoStatus) {
+        if(novoStatus != null && !novoStatus.equals(this.status)) {
+            setStatus(novoStatus);
+            adicionarHistorico("Status alterado para: " +novoStatus.getStatus());
+        }
+    }
+
+    public boolean estaEntregue(){
+        return StatusEncomenda.ENTREGUE.equals(this.status);
+    }
+
+    public void adicionarHistorico(String historico){
+        if(historico == null){
+            historicoRastreio =  new ArrayList<>();
+        }
+        historicoRastreio.add(historico);
     }
 
     /**

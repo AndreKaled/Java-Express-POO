@@ -73,9 +73,27 @@ public class ReclamacaoService {
         }
     }
 
+    public Reclamacao marcarResolvida(int id){
+        Reclamacao reclamacao = buscarPorId(id);
+        if(reclamacao != null){
+            reclamacao.marcarComoResolvida();
+            logger.info("Reclamacao #{} marcada como {}", reclamacao, reclamacao.getStatusReclamacao());
+        }
+        return reclamacao;
+    }
+
+    public Reclamacao marcarEmAnalise(int id){
+        Reclamacao reclamacao = buscarPorId(id);
+        if(reclamacao != null){
+            reclamacao.marcarComoEmAnalise();
+            logger.info("Reclamacao #{} marcada como {}", reclamacao, reclamacao.getStatusReclamacao());
+        }
+        return reclamacao;
+    }
+
     public void registrarFeedback(Reclamacao reclamacao, Feedback feedback){
         if (reclamacao != null) {
-            reclamacao.setFeedback(feedback);
+            reclamacao.registrarFeedback(feedback);
             logger.info("Feedback registrado para a reclamacao #{}.", reclamacao.getIdReclamacao());
         }
     }

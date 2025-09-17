@@ -41,8 +41,18 @@ public class EncomendaService {
     public Encomenda atualizaStatus(String codigoRastreio, StatusEncomenda novoStatus){
         Encomenda encomenda = buscaPorCodigoRastreio(codigoRastreio);
         if(encomenda != null){
-            encomenda.setStatus(novoStatus);
+            encomenda.atualizarStatus(novoStatus);
             logger.info("Encomenda {} atualizada para {}", encomenda.getCodigoRastreio(), novoStatus);
+            return encomenda;
+        }
+        return null;
+    }
+
+    public Encomenda marcarComoEntregue(String codigoRastreio){
+        Encomenda encomenda = buscaPorCodigoRastreio(codigoRastreio);
+        if(encomenda != null){
+            encomenda.estaEntregue();
+            logger.info("Encomenda {} marcada como {}", encomenda.getCodigoRastreio(), encomenda.getStatus());
             return encomenda;
         }
         return null;
@@ -51,7 +61,7 @@ public class EncomendaService {
     public Encomenda adiocionarEventoHistorico(String codigoRastreio, String evento){
         Encomenda encomenda =  buscaPorCodigoRastreio(codigoRastreio);
         if(encomenda != null){
-            encomenda.getHistoricoRastreio().add(evento);
+            encomenda.adicionarHistorico(evento);
             logger.info("Evento '{}' adicionado ao historico da encomenda {}", evento, codigoRastreio);
             return encomenda;
         }
