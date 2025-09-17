@@ -26,8 +26,8 @@ public class ClienteService {
 
     // CREATE / UPDATE
     public Cliente save(Cliente cliente) {
-        if(cliente.getIdCliente() == 0){
-            cliente.setIdCliente(nextId++);
+        if(cliente.getId() == 0){
+            cliente.setId(nextId++);
             clientes.add(cliente);
         }else{
             int index = clientes.indexOf(cliente);
@@ -41,15 +41,15 @@ public class ClienteService {
         return new ArrayList<>(clientes);
     }
 
-    public Cliente findById(Integer idCliente) {
-        return clientes.stream().filter(cliente -> cliente.getIdCliente() == idCliente)
+    public Cliente findById(int idCliente) {
+        return clientes.stream().filter(cliente -> cliente.getId() == idCliente)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Cliente nao encontrado"));
     }
 
     // DELETE
     public void deleteById(int id){
-        clientes.removeIf(cliente -> cliente.getIdCliente() == id);
+        clientes.removeIf(cliente -> cliente.getId() == id);
     }
 
     // outras coisas coisadas

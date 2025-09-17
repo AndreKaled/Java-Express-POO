@@ -1,38 +1,21 @@
 package com.example.javaexpress.model.model;
 
-public class Funcionario {
-    private int idFuncionario;
-    private String nome;
+public class Funcionario extends Pessoa {
     private String cargo;
 
     public Funcionario() {
+        super();
+        this.cargo = "Sem cargo";
     }
 
-    public Funcionario(int idFuncionario, String cargo, String nome) {
-        this.idFuncionario = idFuncionario;
+    public Funcionario(int id, String nome, String email, String cpf, String senha, String cargo) {
+        super(id, nome, email, cpf, senha);
         this.cargo = cargo;
-        this.nome = nome;
     }
 
     /**
      * GETTERS E SETTERS
      * */
-
-    public int getIdFuncionario() {
-        return idFuncionario;
-    }
-
-    public void setIdFuncionario(int idFuncionario) {
-        this.idFuncionario = idFuncionario;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public String getCargo() {
         return cargo;
