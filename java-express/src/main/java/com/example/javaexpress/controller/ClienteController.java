@@ -31,7 +31,7 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public Cliente update(@RequestBody Cliente cliente, @PathVariable int id){
-        cliente.setIdCliente(id);
+        cliente.setId(id);
         return clienteService.save(cliente);
     }
 
