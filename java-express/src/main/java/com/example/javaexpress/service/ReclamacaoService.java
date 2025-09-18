@@ -1,5 +1,8 @@
 package com.example.javaexpress.service;
 
+import com.example.javaexpress.model.enums.Feedback;
+import com.example.javaexpress.model.enums.StatusReclamacao;
+import com.example.javaexpress.model.enums.TipoReclamacao;
 import com.example.javaexpress.model.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

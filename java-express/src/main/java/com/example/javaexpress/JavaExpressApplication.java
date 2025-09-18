@@ -1,5 +1,7 @@
 package com.example.javaexpress;
 
+import com.example.javaexpress.model.enums.Feedback;
+import com.example.javaexpress.model.enums.TipoReclamacao;
 import com.example.javaexpress.model.model.*;
 import com.example.javaexpress.service.ClienteService;
 import com.example.javaexpress.service.EncomendaService;

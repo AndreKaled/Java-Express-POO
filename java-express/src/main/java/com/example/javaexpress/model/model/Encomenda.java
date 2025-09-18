@@ -1,5 +1,7 @@
 package com.example.javaexpress.model.model;
 
+import com.example.javaexpress.model.enums.StatusEncomenda;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

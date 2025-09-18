@@ -1,5 +1,9 @@
 package com.example.javaexpress.model.model;
 
+import com.example.javaexpress.model.enums.Feedback;
+import com.example.javaexpress.model.enums.StatusReclamacao;
+import com.example.javaexpress.model.enums.TipoReclamacao;
+
 import java.time.LocalDateTime;
 
 public class Reclamacao {

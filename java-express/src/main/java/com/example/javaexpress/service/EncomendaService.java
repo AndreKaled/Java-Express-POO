@@ -1,7 +1,7 @@
 package com.example.javaexpress.service;
 
 import com.example.javaexpress.model.model.Encomenda;
-import com.example.javaexpress.model.model.StatusEncomenda;
+import com.example.javaexpress.model.enums.StatusEncomenda;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

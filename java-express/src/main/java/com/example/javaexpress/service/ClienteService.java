@@ -1,5 +1,7 @@
 package com.example.javaexpress.service;
 
+import com.example.javaexpress.model.enums.Feedback;
+import com.example.javaexpress.model.enums.TipoReclamacao;
 import com.example.javaexpress.model.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +31,11 @@ public class ClienteService {
         if(cliente.getId() == 0){
             cliente.setId(nextId++);
             clientes.add(cliente);
+            logger.info("Cliente {#{} - {}} salvo com sucesso", cliente.getId(), cliente.getNome());
         }else{
             int index = clientes.indexOf(cliente);
             clientes.set(index, cliente);
+            logger.info("Cliente {#{} - {}} alterado com sucesso", cliente.getId(), cliente.getNome());
         }
         return cliente;
     }

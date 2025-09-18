@@ -1,4 +1,4 @@
-package com.example.javaexpress.model.model;
+package com.example.javaexpress.model.enums;
 
 public enum TipoReclamacao {
     EXTRAVIO(0),
