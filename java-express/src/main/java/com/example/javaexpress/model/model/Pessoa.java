@@ -19,15 +19,15 @@ public abstract class Pessoa {
         setSenha(senha);
     }
 
-    /**
-     * GETTERS E SETTERS
-     * */
-
     public void exibirInformacoes(){
         System.out.println("ID: " + getId());
         System.out.println("Nome: " + getNome());
         System.out.println("Email: " + getEmail());
     }
+
+    /**
+     * GETTERS E SETTERS
+     * */
 
     public String getSenha() {
         return senha;
