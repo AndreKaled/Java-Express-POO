@@ -13,6 +13,12 @@ public class Funcionario extends Pessoa {
         this.cargo = cargo;
     }
 
+    @Override
+    public void exibirInformacoes() {
+        super.exibirInformacoes();
+        System.out.println("Cargo: " + this.cargo);
+    }
+
     /**
      * GETTERS E SETTERS
      * */
