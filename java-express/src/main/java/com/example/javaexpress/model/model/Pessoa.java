@@ -1,6 +1,12 @@
 package com.example.javaexpress.model.model;
-
+/**
+ * Classe representa pessoa, é uma classe abstrata
+ * @author andré Kaled
+ * @version 1.0
+ * @since 19-09-2025
+ * */
 public abstract class Pessoa {
+
     private int id;
     protected String nome;
     protected String email;
@@ -19,6 +25,10 @@ public abstract class Pessoa {
         setSenha(senha);
     }
 
+
+    /**
+     * Exibe informações básicas de pessoa no terminal
+     * */
     public void exibirInformacoes(){
         System.out.println("ID: " + getId());
         System.out.println("Nome: " + getNome());
