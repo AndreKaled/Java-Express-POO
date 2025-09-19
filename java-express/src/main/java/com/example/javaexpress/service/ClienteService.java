@@ -10,6 +10,20 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Classe de serviços para Cliente, responsável por manipular a lógica de Clientes e controla as ações entre
+ * o Cliente e o Banco de dados.
+ * Esta classe é parte da camada de serviço da arquitetura do sistema e manipula as regras de negócio e a
+ * comunicação com a camada de persistência.
+ *
+ * @author André Kaled
+ * @since 19-09-2025
+ * @version 1.0
+ * @see com.example.javaexpress.model.model.Cliente
+ * @see com.example.javaexpress.controller.ClienteController
+ * */
+
 @Service
 public class ClienteService {
 
