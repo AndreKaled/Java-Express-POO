@@ -27,20 +27,37 @@ import java.util.List;
 @Service
 public class ClienteService {
 
+    /** Objeto Logger para gerar logs de cada ação feita pelo serviço */
     private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
-
+    /**
+     * Lista para armazenar objetos de cliente em memória.
+     * essa lista simula um banco de dados temporário
+     * */
     private List<Cliente> clientes = new ArrayList<>();
+    /**
+     * Gerador de ID incremental para novos clientes.
+     * Este valor é usado para atribuir um ID único a cada novo cliente. (TEMPORARIO ATE CHEGAR O BD)
+     * */
     private int nextId = 1;
 
     private final EncomendaService encomendaService;
     private final ReclamacaoService reclamacaoService;
 
+    /**
+     * Construtor da classe, o objeto controla ações entre o Cliente e o Banco de dados ou mudanças de estados de Cliente
+     * @param encomendaService Objeto de Serviço de Encomendas
+     * @param reclamacaoService Objeto de Serviço de Reclamação
+     * */
     public ClienteService(EncomendaService encomendaService, ReclamacaoService reclamacaoService) {
         this.encomendaService = encomendaService;
         this.reclamacaoService = reclamacaoService;
     }
 
-    // CREATE / UPDATE
+    /**
+     * Salva novos clientes e altera clientes existentes a partir do ID
+     * @param cliente Objeto Cliente com os dados preenchidos (espero, se não só salva o ID)
+     * @return Cliente Objeto Cliente com os seus dados e o ID inserido
+     * */
     public Cliente save(Cliente cliente) {
         if(cliente.getId() == 0){
             cliente.setId(nextId++);
@@ -54,18 +71,30 @@ public class ClienteService {
         return cliente;
     }
 
-    // READ
+
+    /**
+     * Lista todos os clientes existentes (atualmente em memória)
+     * @return List<Cliente> uma cópia da lista de clientes, instanciado como ArrayList
+     * */
     public List<Cliente> findAll() {
         return new ArrayList<>(clientes);
     }
 
-    public Cliente findById(int idCliente) {
-        return clientes.stream().filter(cliente -> cliente.getId() == idCliente)
+    /**
+     * Busca um determinado cliente por ID
+     * @param id Um ID de um cliente que se deseja buscar
+     * @return Cliente retorna o cliente buscado
+     * */
+    public Cliente findById(int id) {
+        return clientes.stream().filter(cliente -> cliente.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Cliente nao encontrado"));
     }
 
-    // DELETE
+    /**
+     * Apaga um cliente com base no ID
+     * @param id Um ID de um cliente que se deseja apagar
+     * */
     public void deleteById(int id){
         clientes.removeIf(cliente -> cliente.getId() == id);
     }
@@ -86,9 +115,14 @@ public class ClienteService {
         reclamacaoService.registrarFeedback(reclamacao, feedback);
     }
 
+    /**
+     * Adiciona uma encomenda para a lista de encomendas do cliente
+     * @param cliente Um objeto Cliente do qual será adicionado a encomenda
+     * @param encomenda A encomenda que será adicionada à lista de encomendas do cliente
+     * */
     public void adicionarEncomenda(Cliente cliente, Encomenda encomenda) {
         if(cliente != null && encomenda != null) {
-            cliente.getListaEncomendas().add(encomenda);
+            cliente.adicionaEncomenda(encomenda);
             logger.info("Encomenda {} adicionada ao cliente {} ", encomenda.getCodigoRastreio(), cliente.getNome());
         }
     }
