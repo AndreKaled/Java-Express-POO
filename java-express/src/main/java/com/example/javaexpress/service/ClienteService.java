@@ -102,7 +102,7 @@ public class ClienteService {
     // outras coisas coisadas
     public Encomenda consultarEncomenda(String codigoRastreio) {
         logger.info("Consultando encomenda com o código {}...", codigoRastreio);
-        return encomendaService.buscaPorCodigoRastreio(codigoRastreio);
+        return encomendaService.findByCodigoRastreio(codigoRastreio);
     }
 
     public Reclamacao registrarReclamacao(Cliente cliente, Encomenda encomenda, TipoReclamacao tipoReclamacao){
