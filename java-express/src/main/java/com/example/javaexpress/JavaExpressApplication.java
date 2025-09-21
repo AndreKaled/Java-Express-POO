@@ -1,6 +1,7 @@
 package com.example.javaexpress;
 
 import com.example.javaexpress.model.enums.Feedback;
+import com.example.javaexpress.model.enums.StatusEncomenda;
 import com.example.javaexpress.model.enums.TipoReclamacao;
 import com.example.javaexpress.model.model.*;
 import com.example.javaexpress.service.ClienteService;
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class JavaExpressApplication {
@@ -32,15 +34,18 @@ public class JavaExpressApplication {
         carlos.setSenha("321");
         carlos = clienteService.save(carlos);
 
-        Encomenda encomendaAndre = encomendaService.criarEncomenda("BR001",
-                "Berlim, Alemanha", "Manaus, Brasil",
+        Encomenda encomendaAndre = new Encomenda(null, "Berlim, Alemanha",
+                "Manaus, Brasil", StatusEncomenda.ENVIADO, new ArrayList<String>(),
                 LocalDate.of(2021, 06,26));
-        Encomenda encomendaAndre2 = encomendaService.criarEncomenda("BR010",
-                "Berlim, Alemanha", "Manaus, Brasil",
+        Encomenda encomendaAndre2 = new Encomenda(null, "Berlim, Alemanha", "Manaus, Brasil",
+                StatusEncomenda.ENVIADO, new ArrayList<String>(), LocalDate.of(2026, 06,26));
+        Encomenda encomendaCarlos = new Encomenda("BR011", "Helsinque, Finlândia",
+                "Manaus, Brasil", StatusEncomenda.ENVIADO, new ArrayList<String>(),
                 LocalDate.of(2026, 06,26));
-        Encomenda encomendaCarlos = encomendaService.criarEncomenda("BR011",
-                "Helsinque, Finlândia", "Manaus, Brasil",
-                LocalDate.of(2026, 06,26));
+        encomendaAndre = encomendaService.save(encomendaAndre);
+        encomendaAndre2 = encomendaService.save(encomendaAndre2);
+        encomendaCarlos = encomendaService.save(encomendaCarlos);
+
         clienteService.adicionarEncomenda(andre, encomendaAndre);
         clienteService.adicionarEncomenda(andre, encomendaAndre2);
         clienteService.adicionarEncomenda(carlos, encomendaCarlos);
