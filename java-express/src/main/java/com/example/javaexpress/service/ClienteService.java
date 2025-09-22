@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Classe de serviços para Cliente, responsável por manipular a lógica de Clientes e controla as ações entre
  * o Cliente e o Banco de dados.
@@ -23,7 +22,6 @@ import java.util.List;
  * @see com.example.javaexpress.model.model.Cliente
  * @see com.example.javaexpress.controller.ClienteController
  * */
-
 @Service
 public class ClienteService {
 
