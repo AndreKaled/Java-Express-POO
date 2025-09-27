@@ -2,6 +2,7 @@ com.example.javaexpress
 com.example.javaexpress.controller
 com.example.javaexpress.model.enums
 com.example.javaexpress.model.model
+com.example.javaexpress.model.repo
 com.example.javaexpress.model.util
 com.example.javaexpress.service
 com.example.javaexpress.view

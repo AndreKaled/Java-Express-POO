@@ -27,35 +27,35 @@ public class JavaExpressApplication {
         andre.setNome("andré");
         andre.setEmail("andre.andrade@icomp.ufam.edu.br");
         andre.setSenha("123");
-        andre = clienteService.save(andre);
+        andre = clienteService.registrarCliente(andre);
         Cliente carlos = new Cliente();
         carlos.setNome("carlos");
         carlos.setEmail("carlos@icomp.ufam.edu.br");
         carlos.setSenha("321");
-        carlos = clienteService.save(carlos);
+        carlos = clienteService.registrarCliente(carlos);
 
-        Encomenda encomendaAndre = new Encomenda(null, "Berlim, Alemanha",
+        Encomenda encomendaAndre = new Encomenda("BR001", "Berlim, Alemanha",
                 "Manaus, Brasil", StatusEncomenda.ENVIADO, new ArrayList<String>(),
                 LocalDate.of(2021, 06,26));
-        Encomenda encomendaAndre2 = new Encomenda(null, "Berlim, Alemanha", "Manaus, Brasil",
+        Encomenda encomendaAndre2 = new Encomenda("BR010", "Berlim, Alemanha", "Manaus, Brasil",
                 StatusEncomenda.ENVIADO, new ArrayList<String>(), LocalDate.of(2026, 06,26));
         Encomenda encomendaCarlos = new Encomenda("BR011", "Helsinque, Finlândia",
                 "Manaus, Brasil", StatusEncomenda.ENVIADO, new ArrayList<String>(),
                 LocalDate.of(2026, 06,26));
-        encomendaAndre = encomendaService.save(encomendaAndre);
-        encomendaAndre2 = encomendaService.save(encomendaAndre2);
-        encomendaCarlos = encomendaService.save(encomendaCarlos);
+        encomendaAndre = encomendaService.registrarEncomenda(encomendaAndre);
+        encomendaAndre2 = encomendaService.registrarEncomenda(encomendaAndre2);
+        encomendaCarlos = encomendaService.registrarEncomenda(encomendaCarlos);
 
-        clienteService.adicionarEncomenda(andre, encomendaAndre);
-        clienteService.adicionarEncomenda(andre, encomendaAndre2);
-        clienteService.adicionarEncomenda(carlos, encomendaCarlos);
+        clienteService.associarEncomendaAoCliente(andre, encomendaAndre);
+        clienteService.associarEncomendaAoCliente(andre, encomendaAndre2);
+        clienteService.associarEncomendaAoCliente(carlos, encomendaCarlos);
 
         //andré reclama
-        reclamacaoService.criarReclamacao(andre, encomendaAndre, TipoReclamacao.ATRASO,
+        reclamacaoService.registrarReclamacao(andre, encomendaAndre, TipoReclamacao.ATRASO,
                 "Ta atrasado omi");
 
         //carlos reclama
-        Reclamacao reclamacaoCarlos = reclamacaoService.criarReclamacao(carlos, encomendaCarlos, TipoReclamacao.OUTRO,
+        Reclamacao reclamacaoCarlos = reclamacaoService.registrarReclamacao(carlos, encomendaCarlos, TipoReclamacao.OUTRO,
                 "Pedi um Iphone 17 e me entregaram um tijolo");
 
         reclamacaoService.registrarFeedback(reclamacaoCarlos, Feedback.OTIMO);
