@@ -54,7 +54,7 @@ public class ClienteService {
     /**
      * Salva novos clientes e altera clientes existentes a partir do ID
      * @param cliente Objeto Cliente com os dados preenchidos (espero, se não só salva o ID)
-     * @return Cliente Objeto Cliente com os seus dados e o ID inserido
+     * @return cliente Objeto Cliente com os seus dados e o ID inserido
      * */
     public Cliente save(Cliente cliente) {
         if(cliente.getId() == 0){
@@ -72,7 +72,7 @@ public class ClienteService {
 
     /**
      * Lista todos os clientes existentes (atualmente em memória)
-     * @return List<Cliente> uma cópia da lista de clientes, instanciado como ArrayList
+     * @return listClientes uma cópia da lista de clientes, instanciado como ArrayList
      * */
     public List<Cliente> findAll() {
         return new ArrayList<>(clientes);
@@ -81,7 +81,7 @@ public class ClienteService {
     /**
      * Busca um determinado cliente por ID
      * @param id Um ID de um cliente que se deseja buscar
-     * @return Cliente retorna o cliente buscado
+     * @return cliente Retorna o cliente buscado
      * */
     public Cliente findById(int id) {
         return clientes.stream().filter(cliente -> cliente.getId() == id)
