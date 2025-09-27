@@ -16,28 +16,28 @@ public class ClienteController {
 
     @GetMapping
     List<Cliente> all(){
-        return clienteService.findAll();
+        return clienteService.listarClientes();
     }
 
     @GetMapping("/{id}")
     public Cliente findById(@PathVariable int id){
-        return clienteService.findById(id);
+        return clienteService.buscarPorId(id);
     }
 
     @PostMapping
     public Cliente create(@RequestBody Cliente cliente){
-        return clienteService.save(cliente);
+        return clienteService.registrarCliente(cliente);
     }
 
     @PutMapping("/{id}")
     public Cliente update(@RequestBody Cliente cliente, @PathVariable int id){
         cliente.setId(id);
-        return clienteService.save(cliente);
+        return clienteService.atualizarCliente(cliente);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id){
-        clienteService.deleteById(id);
+        clienteService.excluirCliente(id);
     }
 
 }
