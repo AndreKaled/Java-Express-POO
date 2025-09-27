@@ -77,14 +77,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.6.3</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <configuration>
+                    <reportOutputDirectory>${project.basedir}/docs</reportOutputDirectory>
+                    <destDir>apidocs</destDir>
+                    <failOnError>false</failOnError>
+                </configuration>
             </plugin>
         </plugins>
     </build>

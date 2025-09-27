@@ -55,7 +55,7 @@ public class FuncionarioService {
 
     /**
      * Lista todos os funcionarios existentes (atualmente em memória)
-     * @return List<Funcionario> uma cópia da lista de funcionarios, instanciado como ArrayList
+     * @return listFuncionarios uma cópia da lista de funcionarios, instanciado como ArrayList
      * */
     public List<Funcionario> findAll() {
         return new ArrayList<>(funcionarios);

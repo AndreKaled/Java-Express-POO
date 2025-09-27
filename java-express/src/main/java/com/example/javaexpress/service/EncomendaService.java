@@ -51,7 +51,7 @@ public class EncomendaService {
 
     /**
      * Lista todas as encomendas existentes (atualmente em memória)
-     * @return List<Encomenda> uma cópia da lista de encomendas, instanciado como ArrayList
+     * @return listEncomendas uma cópia da lista de encomendas, instanciado como ArrayList
      * */
     public List<Encomenda> findAll() {
         return new ArrayList<>(encomendas);
