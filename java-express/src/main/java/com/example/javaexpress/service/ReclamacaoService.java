@@ -34,8 +34,7 @@ public class ReclamacaoService {
 
     /**
      * Gerador de ID incremental para novos funcionarios.
-     * Este valor é usado para atribuir um ID único a cada novo funcionario. (TEMPORARIO ATE CHEGAR O BD)
-     * */
+     */
     private int nextId = 1;
 
     private final EncomendaService encomendaService;
@@ -44,9 +43,13 @@ public class ReclamacaoService {
         this.encomendaService = encomendaService;
     }
 
-    public Reclamacao criarReclamacao(Cliente cliente, Encomenda encomenda, TipoReclamacao tipoReclamacao) {
-        logger.info("Criando nova reclamacao do cliente {} para a encomenda {}", cliente.getNome(),
-                encomenda.getCodigoRastreio());
+    /**
+     * Salva as novas reclamações no sistema
+     * @param cliente Objeto de Cliente do qual vem a reclamação
+     * @param encomenda Objeto de Encomenda da qual encomenda será a reclamacao
+     * @param tipoReclamacao Enum do tipo de reclamacao que será registrado
+     * @return reclamacao Objeto de Reclamacao com os seus dados */
+    public Reclamacao registrarReclamacao(Cliente cliente, Encomenda encomenda, TipoReclamacao tipoReclamacao) {
         Reclamacao reclamacao = new Reclamacao();
         reclamacao.setIdReclamacao(nextId++);
         reclamacao.setCliente(cliente);
@@ -54,27 +57,37 @@ public class ReclamacaoService {
         reclamacao.setTipoReclamacao(tipoReclamacao);
         reclamacao.setStatusReclamacao(StatusReclamacao.ABERTA);
         reclamacao.setAtualizadoEm(LocalDateTime.now());
-        reclamacoes.add(reclamacao);
-        logger.info("Reclamacao #{} criada com sucesso, status {}", reclamacao.getIdReclamacao(), reclamacao.getStatusReclamacao());
-        return reclamacao;
-    }
-    public Reclamacao criarReclamacao(Cliente cliente, Encomenda encomenda, TipoReclamacao tipoReclamacao, String descricao) {
-        logger.info("Criando nova reclamacao do cliente {} para a encomenda {}", cliente.getNome(),
-                encomenda.getCodigoRastreio());
-        Reclamacao reclamacao = new Reclamacao();
-        reclamacao.setIdReclamacao(nextId++);
-        reclamacao.setCliente(cliente);
-        reclamacao.setEncomenda(encomenda);
-        reclamacao.setTipoReclamacao(tipoReclamacao);
-        reclamacao.setStatusReclamacao(StatusReclamacao.ABERTA);
-        reclamacao.setAtualizadoEm(LocalDateTime.now());
-        adicionarDescricao(reclamacao, descricao);
         reclamacoes.add(reclamacao);
         logger.info("Reclamacao #{} criada com sucesso, status {}", reclamacao.getIdReclamacao(), reclamacao.getStatusReclamacao());
         return reclamacao;
     }
 
-    public Reclamacao buscarPorId(int id){
+    /**
+     * Salva as novas reclamações no sistema
+     * @param cliente Objeto de Cliente do qual vem a reclamação
+     * @param encomenda Objeto de Encomenda da qual encomenda será a reclamacao
+     * @param tipoReclamacao Enum do tipo de reclamacao que será registrado
+     * @param descricao String de uma breve descrição sobre a reclamação
+     * @return reclamacao Objeto de Reclamacao com os seus dados */
+    public Reclamacao registrarReclamacao(Cliente cliente, Encomenda encomenda, TipoReclamacao tipoReclamacao, String descricao) {
+        Reclamacao reclamacao = new Reclamacao();
+        reclamacao.setIdReclamacao(nextId++);
+        reclamacao.setCliente(cliente);
+        reclamacao.setEncomenda(encomenda);
+        reclamacao.setTipoReclamacao(tipoReclamacao);
+        reclamacao.setStatusReclamacao(StatusReclamacao.ABERTA);
+        reclamacao.setAtualizadoEm(LocalDateTime.now());
+        adicionarDescricaoParaReclamacao(reclamacao, descricao);
+        reclamacoes.add(reclamacao);
+        logger.info("Reclamacao #{} criada com sucesso, status {}", reclamacao.getIdReclamacao(), reclamacao.getStatusReclamacao());
+        return reclamacao;
+    }
+
+    /**
+     * Busca por uma reclamação no sistema
+     * @param id Id de uma reclamação que se deseja encontrar
+     * @return reclamacao Objeto de Reclamacao com os seus dados */
+    public Reclamacao buscarReclamacaoPorId(int id){
         logger.info("Buscando reclamacao #{}", id);
         for (Reclamacao reclamacao : reclamacoes) {
             if (reclamacao.getIdReclamacao() == id) {
@@ -86,7 +99,11 @@ public class ReclamacaoService {
         return null;
     }
 
-    public void atualizarStatus(Reclamacao reclamacao, StatusReclamacao novoStatus){
+    /**
+     * Atualiza o status de uma reclamação
+     * @param reclamacao Objeto de Reclamação do qual vai atualizar o status
+     * @param novoStatus Enum de qual será o novo status da reclamação */
+    public void atualizarStatusReclamacao(Reclamacao reclamacao, StatusReclamacao novoStatus){
         if(reclamacao != null){
             reclamacao.setStatusReclamacao(novoStatus);
             reclamacao.setAtualizadoEm(LocalDateTime.now());
@@ -94,8 +111,12 @@ public class ReclamacaoService {
         }
     }
 
-    public Reclamacao marcarResolvida(int id){
-        Reclamacao reclamacao = buscarPorId(id);
+    /**
+     * Marca uma reclamação como resolvida
+     * @param id Id de uma reclamação que será marcado como Resolvida
+     * @return reclamacao Objeto de Reclamacao com os seus dados */
+    public Reclamacao marcarReclamacaoResolvida(int id){
+        Reclamacao reclamacao = buscarReclamacaoPorId(id);
         if(reclamacao != null){
             reclamacao.marcarComoResolvida();
             logger.info("Reclamacao #{} marcada como {}", reclamacao, reclamacao.getStatusReclamacao());
@@ -103,8 +124,12 @@ public class ReclamacaoService {
         return reclamacao;
     }
 
-    public Reclamacao marcarEmAnalise(int id){
-        Reclamacao reclamacao = buscarPorId(id);
+    /**
+     * Marca uma reclamação como em análise
+     * @param id Id de uma reclamação que será marcado como Em Análise
+     * @return reclamacao Objeto de Reclamacao com os seus dados */
+    public Reclamacao marcarReclamacaoEmAnalise(int id){
+        Reclamacao reclamacao = buscarReclamacaoPorId(id);
         if(reclamacao != null){
             reclamacao.marcarComoEmAnalise();
             logger.info("Reclamacao #{} marcada como {}", reclamacao, reclamacao.getStatusReclamacao());
@@ -112,6 +137,10 @@ public class ReclamacaoService {
         return reclamacao;
     }
 
+    /**
+     * Registra um Feedback sobre o atendimento de uma reclamação
+     * @param reclamacao Objeto de Reclamação que receberá o feedback
+     * @param feedback  Enum de qual o feedback sobre o atendimento*/
     public void registrarFeedback(Reclamacao reclamacao, Feedback feedback){
         if (reclamacao != null) {
             reclamacao.registrarFeedback(feedback);
@@ -119,7 +148,11 @@ public class ReclamacaoService {
         }
     }
 
-    public void adicionarDescricao(Reclamacao reclamacao, String descricao){
+    /**
+     * Adiciona uma descrição para uma reclamação
+     * @param reclamacao Objeto de Reclamação que terá uma descrição
+     * @param descricao String com a descrição */
+    public void adicionarDescricaoParaReclamacao(Reclamacao reclamacao, String descricao){
         if(reclamacao != null){
             reclamacao.setDescricao(descricao);
             logger.info("Descricao adicionada para a reclamacao #{}: {}", reclamacao.getIdReclamacao(), reclamacao.getDescricao());

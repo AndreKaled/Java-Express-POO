@@ -1,5 +1,5 @@
 # .gitattributes
-# Ignora arquivos gerados automaticamente para a estatística de linguagem
+# ignora arquivos gerados automaticamente para a estatística de linguagem
 /mvnw text eol=lf
 *.cmd text eol=crlf
 /docs/apidocs/** linguist-vendored

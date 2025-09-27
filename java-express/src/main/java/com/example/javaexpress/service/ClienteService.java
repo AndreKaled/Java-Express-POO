@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * **Gerenciamento de Clientes**
+ *
  * Classe de serviços para Cliente, responsável por manipular a lógica de Clientes e controla as ações entre
  * o Cliente e o Banco de dados.
  * Esta classe é parte da camada de serviço da arquitetura do sistema e manipula as regras de negócio e a
@@ -29,12 +31,11 @@ public class ClienteService {
     private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
     /**
      * Lista para armazenar objetos de cliente em memória.
-     * essa lista simula um banco de dados temporário
      * */
     private List<Cliente> clientes = new ArrayList<>();
     /**
      * Gerador de ID incremental para novos clientes.
-     * Este valor é usado para atribuir um ID único a cada novo cliente. (TEMPORARIO ATE CHEGAR O BD)
+     * Este valor é usado para atribuir um ID único a cada novo cliente.
      * */
     private int nextId = 1;
 
@@ -52,29 +53,34 @@ public class ClienteService {
     }
 
     /**
-     * Salva novos clientes e altera clientes existentes a partir do ID
-     * @param cliente Objeto Cliente com os dados preenchidos (espero, se não só salva o ID)
+     * Registra novos clientes no sistema
+     * @param cliente Objeto Cliente com os dados preenchidos
      * @return cliente Objeto Cliente com os seus dados e o ID inserido
      * */
-    public Cliente save(Cliente cliente) {
-        if(cliente.getId() == 0){
-            cliente.setId(nextId++);
-            clientes.add(cliente);
-            logger.info("Cliente {#{} - {}} salvo com sucesso", cliente.getId(), cliente.getNome());
-        }else{
-            int index = clientes.indexOf(cliente);
-            clientes.set(index, cliente);
-            logger.info("Cliente {#{} - {}} alterado com sucesso", cliente.getId(), cliente.getNome());
-        }
+    public Cliente registrarCliente(Cliente cliente) {
+        cliente.setId(nextId++);
+        clientes.add(cliente);
+        logger.info("Cliente {#{} - {}} salvo com sucesso", cliente.getId(), cliente.getNome());
         return cliente;
     }
 
+    /**
+     * Altera dados de um clientes no sistema
+     * @param cliente Objeto Cliente com os dados alterados
+     * @return cliente Objeto Cliente com os seus dados alterados no sistema e o ID
+     * */
+    public Cliente atualizarCliente(Cliente cliente) {
+        int index = clientes.indexOf(cliente);
+        clientes.set(index, cliente);
+        logger.info("Cliente {#{} - {}} alterado com sucesso", cliente.getId(), cliente.getNome());
+        return cliente;
+    }
 
     /**
-     * Lista todos os clientes existentes (atualmente em memória)
+     * Lista todos os clientes existentes
      * @return listClientes uma cópia da lista de clientes, instanciado como ArrayList
      * */
-    public List<Cliente> findAll() {
+    public List<Cliente> listarClientes() {
         return new ArrayList<>(clientes);
     }
 
@@ -83,32 +89,33 @@ public class ClienteService {
      * @param id Um ID de um cliente que se deseja buscar
      * @return cliente Retorna o cliente buscado
      * */
-    public Cliente findById(int id) {
+    public Cliente buscarPorId(int id) {
+        logger.info("Buscando Cliente com o ID: {}",  id);
         return clientes.stream().filter(cliente -> cliente.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Cliente nao encontrado"));
     }
 
     /**
-     * Apaga um cliente com base no ID
+     * Exclui um cliente com base no Id
      * @param id Um ID de um cliente que se deseja apagar
      * */
-    public void deleteById(int id){
+    public void excluirCliente(int id){
         clientes.removeIf(cliente -> cliente.getId() == id);
     }
 
     // outras coisas coisadas
     public Encomenda consultarEncomenda(String codigoRastreio) {
         logger.info("Consultando encomenda com o código {}...", codigoRastreio);
-        return encomendaService.findByCodigoRastreio(codigoRastreio);
+        return encomendaService.buscarPorCodigoRastreio(codigoRastreio);
     }
 
     public Reclamacao registrarReclamacao(Cliente cliente, Encomenda encomenda, TipoReclamacao tipoReclamacao){
         logger.info("Registrando reclamação do cliente {} ", cliente.getNome());
-        return reclamacaoService.criarReclamacao(cliente, encomenda, tipoReclamacao);
+        return reclamacaoService.registrarReclamacao(cliente, encomenda, tipoReclamacao);
     }
 
-    public void darFeedback(Reclamacao reclamacao, Feedback feedback) {
+    public void registrarFeedback(Reclamacao reclamacao, Feedback feedback) {
         logger.info("O cliente {} deu o feedback {}", reclamacao.getCliente().getNome(), feedback);
         reclamacaoService.registrarFeedback(reclamacao, feedback);
     }
@@ -118,7 +125,7 @@ public class ClienteService {
      * @param cliente Um objeto Cliente do qual será adicionado a encomenda
      * @param encomenda A encomenda que será adicionada à lista de encomendas do cliente
      * */
-    public void adicionarEncomenda(Cliente cliente, Encomenda encomenda) {
+    public void associarEncomendaAoCliente(Cliente cliente, Encomenda encomenda) {
         if(cliente != null && encomenda != null) {
             cliente.adicionaEncomenda(encomenda);
             logger.info("Encomenda {} adicionada ao cliente {} ", encomenda.getCodigoRastreio(), cliente.getNome());
