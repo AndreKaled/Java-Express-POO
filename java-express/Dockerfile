@@ -3,7 +3,7 @@ FROM maven:3.9.6-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# Copia o pom.xml e baixa dependências antes do código — melhora o cache
+# Copia o pom.xml e baixa dependências antes do código
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
