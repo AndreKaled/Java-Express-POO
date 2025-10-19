@@ -11,23 +11,24 @@ import java.util.List;
 @Service
 public class RotaService {
 
-    private final RotaApiClient client;
+    private final RotaApiClient api;
     private final RotaOtimizada otimizador;
 
-    public RotaService(RotaApiClient client){
-        this.client = client;
+    public RotaService(RotaApiClient api){
+        this.api = api;
         this.otimizador = new RotaOtimizada();
     }
 
     public Rota otimizarRota(List<Coordenadas> pontos){
-        return null;
+        double[][] distanciaMatriz = api.getDistanciaMatriz(pontos);
+        return otimizador.vizinhoMaisProximo(pontos, distanciaMatriz);
     }
 
     //teste
     public double[][] testarMatriz(List<Coordenadas> pontos) {
-        return client.getDistanciaMatriz(pontos);
+        return api.getDistanciaMatriz(pontos);
     }
     public Rota testarRota(List<Coordenadas> pontos) {
-        return client.getRota(pontos);
+        return api.getRota(pontos);
     }
 }

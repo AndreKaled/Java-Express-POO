@@ -23,7 +23,6 @@ public class RotaController {
     @GetMapping("/otimizar")
     public Rota otimizar(){
         List<Coordenadas> pontos = pontosCache.buscar("usuario1");
-        //System.out.println("pontos: " + pontos);
         return rotaService.otimizarRota(pontos);
     }
 
