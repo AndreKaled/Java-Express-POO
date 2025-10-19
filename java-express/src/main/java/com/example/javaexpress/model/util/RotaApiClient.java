@@ -4,6 +4,8 @@ import com.example.javaexpress.model.model.Coordenadas;
 import com.example.javaexpress.model.model.Rota;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
@@ -48,8 +50,8 @@ public class RotaApiClient {
                             .mapToDouble(Double::doubleValue)
                             .toArray())
                     .toArray(double[][]::new);
-        }catch (Exception e){
-            System.err.println("Erro ao chamar OpenRouteService: " +e.getMessage());
+        }catch (HttpClientErrorException | HttpServerErrorException e){
+            System.err.println("Erro HTTP " +e.getStatusCode() +":" +e.getResponseBodyAsString());
             return new double[0][0];
         }
     }
@@ -90,6 +92,9 @@ public class RotaApiClient {
     }
 
 
+    /**
+     * ponto crítico, ajustar dps para threads
+     * */
     private void respeitarRateLimit() {
         long agora = System.currentTimeMillis();
         long espera = ultimaChamada + INTERVALO_MINIMO_MS - agora;
