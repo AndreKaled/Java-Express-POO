@@ -21,7 +21,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Java
@@ -30,10 +30,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Generate Javadoc
+      - name: Build project and generate Javadoc
+        run: mvn clean javadoc:javadoc
+
+      - name: Copy Javadoc to docs
         run: |
-          mkdir -p docs
-          javadoc -d docs -sourcepath src -subpackages com.example.javaexpress
+          rm -rf docs
+          cp -r target/site/apidocs docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
