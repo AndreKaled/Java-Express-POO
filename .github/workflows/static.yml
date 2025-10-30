@@ -30,13 +30,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build project and generate Javadoc
+      - name: Generate Javadoc
         run: mvn -f java-express/pom.xml clean javadoc:javadoc
 
-      - name: Copy Javadoc to docs
+      - name: Prepare docs folder
         run: |
           rm -rf docs
-          cp -r target/site/apidocs docs
+          cp -r java-express/target/site/apidocs docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
