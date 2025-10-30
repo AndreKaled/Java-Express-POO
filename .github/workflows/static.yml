@@ -37,7 +37,14 @@ jobs:
       - name: Prepare docs folder
         run: |
           rm -rf docs
-          cp -r java-express/target/site/apidocs docs
+          # listar para debug a partir da raiz
+          ls -l java-express/target/site
+          if [ -d "java-express/target/site/apidocs" ]; then
+            cp -r java-express/target/site/apidocs docs
+          else
+            echo "Erro: Javadoc não gerou apidocs"
+            exit 1
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
