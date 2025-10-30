@@ -31,7 +31,7 @@ jobs:
           java-version: '17'
 
       - name: Build project and generate Javadoc
-        run: mvn clean javadoc:javadoc
+        run: mvn -f java-express/pom.xml clean javadoc:javadoc
 
       - name: Copy Javadoc to docs
         run: |
