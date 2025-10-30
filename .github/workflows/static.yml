@@ -31,7 +31,8 @@ jobs:
           java-version: '17'
 
       - name: Generate Javadoc
-        run: mvn -f java-express/pom.xml clean javadoc:javadoc
+        working-directory: java-express
+        run: mvn clean javadoc:javadoc
 
       - name: Prepare docs folder
         run: |
