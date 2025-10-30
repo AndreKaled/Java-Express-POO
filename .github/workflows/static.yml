@@ -10,10 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   deploy:
     environment:
@@ -21,40 +17,33 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # 1. Pega o código
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Configura Java 21
-      - name: Set up Java
+      - name: Set up Java 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      # 3. Gera Javadoc via Maven
       - name: Generate Javadoc
         working-directory: java-express
         run: mvn clean javadoc:javadoc
 
-      # 4. Prepara pasta github-pages com subpasta /docs
       - name: Prepare Pages artifact
         run: |
           rm -rf github-pages
           mkdir -p github-pages/docs
-          cp -r java-express/target/site/apidocs/* github-pages/docs/
+          cp -r java-express/docs/* github-pages/docs/
 
-      # 5. Configura GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 6. Sobe o artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'github-pages'
 
-      # 7. Deploy para GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
