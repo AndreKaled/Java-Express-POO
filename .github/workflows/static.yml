@@ -10,21 +10,14 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Java 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -32,19 +25,10 @@ jobs:
 
       - name: Generate Javadoc
         working-directory: java-express
-        run: mvn clean install javadoc:javadoc
+        run: mvn clean javadoc:javadoc
 
-      - name: Prepare docs folder
-        run: |
-          rm -rf docs
-          # listar para debug a partir da raiz
-          ls -l java-express/target/site
-          if [ -d "java-express/target/site/apidocs" ]; then
-            cp -r java-express/target/site/apidocs docs
-          else
-            echo "Erro: Javadoc não gerou apidocs"
-            exit 1
-          fi
+      - name: Verify docs folder
+        run: ls -l java-express/docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -52,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'
+          path: 'java-express/docs'
 
       - name: Deploy to GitHub Pages
         id: deployment
