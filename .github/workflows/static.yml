@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate Javadoc
         working-directory: java-express
-        run: mvn clean javadoc:javadoc
+        run: mvn clean install javadoc:javadoc
 
       - name: Prepare docs folder
         run: |
