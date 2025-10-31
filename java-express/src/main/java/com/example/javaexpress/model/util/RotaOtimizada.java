@@ -6,13 +6,42 @@ import com.example.javaexpress.model.model.Rota;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe utilitária responsável por algoritmos de otimização de rotas.
+ * <p>
+ * Atualmente, implementa uma heurística gulosa (vizinho mais próximo)
+ * para gerar uma rota aproximada do Problema do Caixeiro Viajante.
+ * Essa heurística não garante a solução ótima, mas fornece um caminho eficiente
+ * em tempo polinomial.
+ * </p>
+ *
+ * <p>
+ * Exemplo de uso:
+ * <pre>{@code
+ * RotaOtimizada otimizador = new RotaOtimizada();
+ * Rota rota = otimizador.vizinhoMaisProximo(pontos, matrizDistancias);
+ * }</pre>
+ * </p>
+ * @author André Kaled
+ * @version 1.0
+ * @since 19-10-2025
+ * */
 public class RotaOtimizada {
 
-    /**Aplica a heuristica gulosa para encontrar uma rota aproximada para o problema do caixeiro viajante
-     * @param pontos Lista de Coordenadas original
-     * @param matrizDistancias A matriz de distância NxN das coordenadas
-     * @return Um objeto Rota com a sequência otimizada de coordenadas e suas distâncias
-     * */
+    /**
+     * Aplica a heurística do vizinho mais próximo para gerar uma rota aproximada
+     * conectando todas as coordenadas e retornando ao ponto inicial.
+     * <p>
+     * O algoritmo parte de um ponto inicial (índice 0) e a cada iteração
+     * seleciona o ponto não visitado mais próximo até que todos tenham sido visitados.
+     * No final, retorna ao ponto de origem, formando um ciclo completo.
+     * </p>
+     *
+     * @param pontos Lista de {@link Coordenadas} representando os pontos a serem visitados.
+     * @param matrizDistancias Matriz NxN contendo as distâncias entre os pontos.
+     *                         A posição [i][j] deve conter a distância entre o ponto i e o ponto j.
+     * @return Um objeto {@link Rota} contendo a sequência otimizada de coordenadas e a distância total percorrida.
+     */
     public Rota vizinhoMaisProximo(List<Coordenadas> pontos, double[][] matrizDistancias){
         int numPontos = pontos.size();
         //casos triviais
