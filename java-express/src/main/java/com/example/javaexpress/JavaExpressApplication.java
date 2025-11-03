@@ -4,6 +4,7 @@ import com.example.javaexpress.model.enums.Feedback;
 import com.example.javaexpress.model.enums.StatusEncomenda;
 import com.example.javaexpress.model.enums.TipoReclamacao;
 import com.example.javaexpress.model.model.*;
+import com.example.javaexpress.model.util.Validate;
 import com.example.javaexpress.service.ClienteService;
 import com.example.javaexpress.service.EncomendaService;
 import com.example.javaexpress.service.ReclamacaoService;
@@ -20,44 +21,11 @@ public class JavaExpressApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(JavaExpressApplication.class, args);
         System.out.println("iniciando");
-        ClienteService clienteService = context.getBean(ClienteService.class);
-        EncomendaService encomendaService = context.getBean(EncomendaService.class);
-        ReclamacaoService reclamacaoService = context.getBean(ReclamacaoService.class);
-        Cliente andre = new Cliente();
-        andre.setNome("andré");
-        andre.setEmail("andre.andrade@icomp.ufam.edu.br");
-        andre.setSenha("123");
-        andre = clienteService.registrarCliente(andre);
-        Cliente carlos = new Cliente();
-        carlos.setNome("carlos");
-        carlos.setEmail("carlos@icomp.ufam.edu.br");
-        carlos.setSenha("321");
-        carlos = clienteService.registrarCliente(carlos);
-
-        Encomenda encomendaAndre = new Encomenda("BR001", "Berlim, Alemanha",
-                "Manaus, Brasil", StatusEncomenda.ENVIADO, new ArrayList<String>(),
-                LocalDate.of(2021, 06,26));
-        Encomenda encomendaAndre2 = new Encomenda("BR010", "Berlim, Alemanha", "Manaus, Brasil",
-                StatusEncomenda.ENVIADO, new ArrayList<String>(), LocalDate.of(2026, 06,26));
-        Encomenda encomendaCarlos = new Encomenda("BR011", "Helsinque, Finlândia",
-                "Manaus, Brasil", StatusEncomenda.ENVIADO, new ArrayList<String>(),
-                LocalDate.of(2026, 06,26));
-        encomendaAndre = encomendaService.registrarEncomenda(encomendaAndre);
-        encomendaAndre2 = encomendaService.registrarEncomenda(encomendaAndre2);
-        encomendaCarlos = encomendaService.registrarEncomenda(encomendaCarlos);
-
-        clienteService.associarEncomendaAoCliente(andre, encomendaAndre);
-        clienteService.associarEncomendaAoCliente(andre, encomendaAndre2);
-        clienteService.associarEncomendaAoCliente(carlos, encomendaCarlos);
-
-        //andré reclama
-        reclamacaoService.registrarReclamacao(andre, encomendaAndre, TipoReclamacao.ATRASO,
-                "Ta atrasado omi");
-
-        //carlos reclama
-        Reclamacao reclamacaoCarlos = reclamacaoService.registrarReclamacao(carlos, encomendaCarlos, TipoReclamacao.OUTRO,
-                "Pedi um Iphone 17 e me entregaram um tijolo");
-
-        reclamacaoService.registrarFeedback(reclamacaoCarlos, Feedback.OTIMO);
+        testeValidacoes();
     }
+
+    public static void testeValidacoes() {
+        //mete os testes ae usando a classe Validate
+    }
+
 }
