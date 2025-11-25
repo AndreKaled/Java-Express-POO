@@ -127,4 +127,18 @@ public class EncomendaService {
         return null;
     }
 
+    // Dentro de com.example.javaexpress.service.EncomendaService.java
+
+// Adicione este método à classe EncomendaService:
+
+public String rastrear(String codigoRastreio) {
+    // Aqui é onde você implementaria a lógica real de busca no seu banco de dados
+    
+    if (codigoRastreio != null && codigoRastreio.length() > 5) {
+        // Retorno de dados simulado para o chatbot
+        return "Objeto " + codigoRastreio + " em trânsito. Último status: Saiu para entrega em Manaus.";
+    }
+    return "Código de rastreio não encontrado ou inválido.";
+}
+
 }
