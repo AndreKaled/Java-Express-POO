@@ -3,11 +3,12 @@ package com.example.javaexpress.service.ChatBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// ATUALIZE ESTAS LINHAS:
+import com.example.javaexpress.service.ClienteService;
 import com.example.javaexpress.service.EncomendaService; 
 import com.example.javaexpress.service.ChatBot.llm.LLMClient;
 import com.example.javaexpress.service.ChatBot.tools.JsonParser;
 import com.example.javaexpress.service.ChatBot.tools.FuncaoChamadaDTO;
+import com.example.javaexpress.model.model.Encomenda;
 
 @Service
 public class ChatBotService {
@@ -15,41 +16,50 @@ public class ChatBotService {
     private final LLMClient llmClient; 
     private final JsonParser jsonParser; 
     private final EncomendaService encomendaService; 
+    private final ClienteService clienteService;
 
     @Autowired
-    public ChatBotService(LLMClient llmClient, JsonParser jsonParser, EncomendaService encomendaService) {
+    public ChatBotService(LLMClient llmClient, JsonParser jsonParser, EncomendaService encomendaService, ClienteService clienteService) {
         this.llmClient = llmClient;
         this.jsonParser = jsonParser;
         this.encomendaService = encomendaService;
+        this.clienteService = clienteService;
     }
     
     private static final String SYSTEM_PROMPT = 
-        "Você é um assistente dos Correios do Brasil. Foco em rastreamento e prazos.";
+        "Você é um assistente virtual de um sistema web de correios chamado Java Express. Foco em rastreamento e prazos.";
 
     public String gerarResposta(String mensagemUsuario) {
         
-        // 1. Primeira Chamada à LLM (Decisão)
         String respostaOuFuncaoJSON = llmClient.primeiraChamada(SYSTEM_PROMPT, mensagemUsuario);
-
-        // 2. Tenta fazer o Parsing (Análise) da Chamada de Função
         FuncaoChamadaDTO chamada = jsonParser.parsearChamada(respostaOuFuncaoJSON);
-
+    
         if (chamada != null) {
-            
-            // 3. Verifica qual função a LLM quer executar.
+            String resultadoDaFuncao;
+
             if (chamada.getFuncao().equals("rastrear_encomenda")) {
+                String codigo = jsonParser.extrairParametro(chamada, "codigo_rastreio");
+                resultadoDaFuncao = encomendaService.rastrear(codigo);
+            } else if (chamada.getFuncao().equals("listar_encomendas")) {
+                resultadoDaFuncao = encomendaService.listarEncomendasChatbot();
+            } else if (chamada.getFuncao().equals("consultar_encomenda_cliente")) {
                 
                 String codigo = jsonParser.extrairParametro(chamada, "codigo_rastreio");
-                
-                // 4. Executa o serviço real do seu sistema.
-                String resultadoDaFuncao = encomendaService.rastrear(codigo);
-                
-                // 5. Segunda Chamada à LLM (Para formatar o resultado).
-                return llmClient.chamadaFinal(mensagemUsuario, resultadoDaFuncao);
-            }
-        }
+                Encomenda encomenda = clienteService.consultarEncomenda(codigo);
+                resultadoDaFuncao = "Status: " + encomenda.getStatus() + ", Destino: " + encomenda.getDestino();
 
-        // 6. Se não era uma função, retorna o texto direto.
-        return respostaOuFuncaoJSON;
+            } else if (chamada.getFuncao().equals("registrar_nova_reclamacao")) {
+                
+                String codigo = jsonParser.extrairParametro(chamada, "codigo_rastreio");
+                String motivo = jsonParser.extrairParametro(chamada, "motivo");
+                resultadoDaFuncao = String.format(
+                    "Reclamação registrada com sucesso para o código %s com o motivo: %s.", codigo, motivo);
+            } else {
+                return "Erro interno: A LLM solicitou uma função desconhecida do sistema.";
+            }
+            return llmClient.chamadaFinal(mensagemUsuario, resultadoDaFuncao);
+        } else {
+            return respostaOuFuncaoJSON;
+        }
     }
 }
