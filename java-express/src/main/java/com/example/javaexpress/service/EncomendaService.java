@@ -126,19 +126,54 @@ public class EncomendaService {
         }
         return null;
     }
+// Substitua o método 'public String rastrear(String codigoRastreio)' existente por este:
 
-    // Dentro de com.example.javaexpress.service.EncomendaService.java
-
-// Adicione este método à classe EncomendaService:
-
-public String rastrear(String codigoRastreio) {
-    // Aqui é onde você implementaria a lógica real de busca no seu banco de dados
-    
-    if (codigoRastreio != null && codigoRastreio.length() > 5) {
-        // Retorno de dados simulado para o chatbot
-        return "Objeto " + codigoRastreio + " em trânsito. Último status: Saiu para entrega em Manaus.";
+    /**
+     * Funcao RASTREAR para uso exclusivo do Chatbot.
+     * @param codigoRastreio O codigo de rastreio
+     * @return String com os detalhes do rastreio ou mensagem de erro.
+     * */
+    public String rastrear(String codigoRastreio) {
+        try {
+            Encomenda encomenda = buscarPorCodigoRastreio(codigoRastreio);
+            
+            // Se a busca for bem-sucedida, formata os dados para o Chatbot
+            return String.format(
+                "Encomenda encontrada! Status: %s. Destino: %s. Histórico: %s. Data Prevista: %s",
+                encomenda.getStatus(), 
+                encomenda.getDestino(), 
+                encomenda.getHistoricoRastreio().isEmpty() ? "Nenhum evento registrado." : encomenda.getHistoricoRastreio().toString(), 
+                encomenda.getDataPrevistaEntrega()
+            );
+        } catch (NullPointerException e) {
+            // TRATAMENTO DE ERRO: Garante que o método não quebre (Status 500) se a encomenda não for encontrada.
+            return "Código de rastreio não encontrado. Por favor, verifique o código informado.";
+        } catch (Exception e) {
+            return "Ocorreu um erro interno ao buscar a encomenda. Tente novamente.";
+        }
     }
-    return "Código de rastreio não encontrado ou inválido.";
-}
+// Dentro de com.example.javaexpress.service.EncomendaService.java
+
+    /**
+     * Lista todas as encomendas existentes, formatado para uso no Chatbot.
+     * @return String formatada com a lista de encomendas.
+     * */
+    public String listarEncomendasChatbot() {
+        List<Encomenda> lista = listarEncomendas(); // Usa o método listarEncomendas() existente
+
+        if (lista == null || lista.isEmpty()) {
+            return "Nenhuma encomenda ativa foi encontrada para sua conta. (Lista vazia)";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Resumo das suas encomendas ativas (Códigos e Status):\n");
+        
+        for (Encomenda e : lista) {
+            sb.append(String.format("- Código: %s, Status: %s, Destino: %s.\n",
+                e.getCodigoRastreio(), e.getStatus(), e.getDestino()));
+        }
+        
+        return sb.toString();
+    }
 
 }
