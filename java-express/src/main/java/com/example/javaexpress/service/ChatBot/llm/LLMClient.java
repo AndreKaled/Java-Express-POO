@@ -8,29 +8,32 @@ public class LLMClient {
 
     @Value("${llm.api.key}")
     private String apiKey;
-    
-    // public LLMClient(...) {} 
 
     public String primeiraChamada(String systemPrompt, String mensagemUsuario) {
-        
-        // Lógica real de chamada HTTP/SDK aqui.
-        // Esta função envia a mensagem e as definições das ferramentas para a LLM.
-
-        if (mensagemUsuario.toLowerCase().contains("rastreio") || mensagemUsuario.toLowerCase().contains("rastrear")) {
-             // SIMULAÇÃO do JSON de Function Calling retornado pela LLM:
-             return "{\"funcao\":\"rastrear_encomenda\",\"parametros\":{\"codigo_rastreio\":\"AA1234567BR\"}}"; 
-        } else {
-             // SIMULAÇÃO da resposta direta da LLM:
-             return "Sou o assistente dos Correios. Por favor, me diga o que deseja rastrear.";
-        }
-    }
-
+    
+     String msg = mensagemUsuario.toLowerCase();
+     
+     if (msg.contains("reclamação") 
+          || msg.contains("reclamar")
+          || msg.contains("registrar")
+          || msg.contains("abrir chamado")) {
+          return "{\"funcao\":\"registrar_nova_reclamacao\",\"parametros\":{\"codigo_rastreio\":\"BR011\",\"motivo\":\"extraviada\"}}";
+    
+     } else if (msg.contains("rastreio") 
+          || msg.contains("rastrear")
+          || msg.contains("codigo")) {
+          return "{\"funcao\":\"rastrear_encomenda\",\"parametros\":{\"codigo_rastreio\":\"AA1234567BR\"}}"; 
+     } else if (msg.contains("consulta")
+          || msg.contains("status de")) {
+          return "{\"funcao\":\"consultar_encomenda_cliente\",\"parametros\":{\"codigo_rastreio\":\"BR010\"}}";
+     } else if (msg.contains("listar") 
+          || msg.contains("minhas encomendas")) {
+          return "{\"funcao\":\"listar_encomendas\",\"parametros\":{}}"; 
+     } else {
+          return "Sou o assistente virtual do Java Express. Por favor, me diga o que deseja: Rastrear,consultar,listar encomendas ou registrar uma reclamação.";
+     }
+ }
     public String chamadaFinal(String mensagemOriginal, String resultadoDaFuncao) {
-        
-        // Lógica real de chamada HTTP/SDK aqui.
-        // Esta função envia o resultadoDaFuncao (o dado real) de volta para a LLM formatar a resposta.
-
-        // SIMULAÇÃO da Resposta Final:
-        return "Conforme solicitado, seu código (" + mensagemOriginal + ") foi rastreado. Status: " + resultadoDaFuncao;
+        return "Conforme solicitado, sua requisição sobre '" + mensagemOriginal + "' foi processada. Resultado: " + resultadoDaFuncao;
     }
 }
