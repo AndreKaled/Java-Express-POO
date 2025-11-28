@@ -2,6 +2,7 @@ package com.example.javaexpress.model.util;
 
 import com.example.javaexpress.model.model.Coordenadas;
 import com.example.javaexpress.model.model.Rota;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,7 +18,8 @@ import java.util.Map;
 public class RotaApiClient {
 
     private static final String URL_BASE = "https://api.openrouteservice.org/v2/";
-    private static final String API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImU5YTE2MWI1N2U0NjQ4MTA4ZjQxZWZiY2E1YTllNDgwIiwiaCI6Im11cm11cjY0In0=";
+    @Value("${OPENROUTE_API_KEY}")
+    private String API_KEY;
     private final RestTemplate restTemplate = new RestTemplate();
 
     private long ultimaChamada = 0;
