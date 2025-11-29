@@ -21,7 +21,8 @@ public class RotaService {
 
     public Rota otimizarRota(List<Coordenadas> pontos){
         double[][] distanciaMatriz = api.getDistanciaMatriz(pontos);
-        return otimizador.vizinhoMaisProximo(pontos, distanciaMatriz);
+        Rota rotaOrdenada = otimizador.vizinhoMaisProximo(pontos, distanciaMatriz);
+        return api.getRota(rotaOrdenada.getCoordenadas());
     }
 
     //teste
