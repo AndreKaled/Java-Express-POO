@@ -6,6 +6,7 @@ import com.example.javaexpress.model.util.RotaApiClient;
 import com.example.javaexpress.model.util.RotaOtimizada;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,29 +21,42 @@ public class RotaService {
         this.otimizador = new RotaOtimizada();
     }
 
-    public Rota otimizarRota(List<Coordenadas> pontos){
-        for(int i = 0; i < pontos.size(); i++)
-            pontos.get(i).setId(i);
+    public Rota otimizarRota(List<Coordenadas> pontosRaw){
 
-        double[][] distanciaMatriz = api.getDistanciaMatriz(pontos);
+        List<Coordenadas> pontosLimpos = pontosRaw.stream()
+                .filter(c -> c != null)
+                .toList();
 
-        List<Coordenadas> rotaInicial;
-        Map<Coordenadas, Integer> idx = otimizador.criarIndexMap(pontos);
+        var resposta = api.getDistanciaMatriz(pontosLimpos);
 
-        if(pontos.size() <= 12){
-            rotaInicial = otimizador.vizinhoMaisProximo(pontos, distanciaMatriz).getCoordenadas();
-            rotaInicial = otimizador.twoOpt(rotaInicial, distanciaMatriz, idx);
-        }else{
-            rotaInicial = otimizador.simulatedAnnealing(pontos, distanciaMatriz, idx);
+        // remove pontos com snapped_distance alto
+        List<Coordenadas> pontosValidos = new ArrayList<>();
+        for (int i = 0; i < pontosLimpos.size(); i++) {
+            if (resposta.snapped[i] <= 350) {
+                pontosValidos.add(pontosLimpos.get(i));
+            }
         }
-        return api.getRota(rotaInicial);
-    }
 
-    //teste
-    public double[][] testarMatriz(List<Coordenadas> pontos) {
-        return api.getDistanciaMatriz(pontos);
-    }
-    public Rota testarRota(List<Coordenadas> pontos) {
-        return api.getRota(pontos);
+        if (pontosValidos.isEmpty()) {
+            throw new IllegalStateException("Nenhum ponto roteável dentro de 350m.");
+        }
+
+        // ajusta ids
+        for(int i = 0; i < pontosValidos.size(); i++)
+            pontosValidos.get(i).setId(i);
+
+        double[][] matriz = api.getDistanciaMatriz(pontosValidos).distancias;
+
+        Map<Coordenadas, Integer> idx = otimizador.criarIndexMap(pontosValidos);
+        List<Coordenadas> rotaInicial;
+
+        if (pontosValidos.size() <= 12) {
+            rotaInicial = otimizador.vizinhoMaisProximo(pontosValidos, matriz).getCoordenadas();
+            rotaInicial = otimizador.twoOpt(rotaInicial, matriz, idx);
+        } else {
+            rotaInicial = otimizador.simulatedAnnealing(pontosValidos, matriz, idx);
+        }
+
+        return api.getRota(rotaInicial);
     }
 }
