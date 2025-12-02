@@ -7,6 +7,7 @@ import com.example.javaexpress.model.util.RotaOtimizada;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RotaService {
@@ -20,9 +21,21 @@ public class RotaService {
     }
 
     public Rota otimizarRota(List<Coordenadas> pontos){
+        for(int i = 0; i < pontos.size(); i++)
+            pontos.get(i).setId(i);
+
         double[][] distanciaMatriz = api.getDistanciaMatriz(pontos);
-        Rota rotaOrdenada = otimizador.vizinhoMaisProximo(pontos, distanciaMatriz);
-        return api.getRota(rotaOrdenada.getCoordenadas());
+
+        List<Coordenadas> rotaInicial;
+        Map<Coordenadas, Integer> idx = otimizador.criarIndexMap(pontos);
+
+        if(pontos.size() <= 12){
+            rotaInicial = otimizador.vizinhoMaisProximo(pontos, distanciaMatriz).getCoordenadas();
+            rotaInicial = otimizador.twoOpt(rotaInicial, distanciaMatriz, idx);
+        }else{
+            rotaInicial = otimizador.simulatedAnnealing(pontos, distanciaMatriz, idx);
+        }
+        return api.getRota(rotaInicial);
     }
 
     //teste
