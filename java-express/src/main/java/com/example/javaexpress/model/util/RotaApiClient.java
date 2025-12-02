@@ -10,6 +10,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,9 +83,12 @@ public class RotaApiClient {
             // converter coordenadas de volta pra lista de objetos
             Map<String, Object> geometry = (Map<String, Object>) features.get("geometry");
             List<List<Double>> coordsResposta = (List<List<Double>>) geometry.get("coordinates");
-            List<Coordenadas> coordenadas = coordsResposta.stream()
-                    .map(c -> new Coordenadas(c.get(1), c.get(0))) // volta pra lat/lon
-                    .toList();
+            List<Coordenadas> coordenadas = new ArrayList<>();
+            for (List<Double> c : coordsResposta) {
+                Coordenadas original = encontrarOriginal(pontos, c.get(1), c.get(0));
+                coordenadas.add(original);
+            }
+
 
             return new Rota(coordenadas, distancia);
         } catch (Exception e) {
@@ -93,6 +97,15 @@ public class RotaApiClient {
         }
     }
 
+    private Coordenadas encontrarOriginal(List<Coordenadas> originais, double lat, double lon) {
+        for (Coordenadas p : originais) {
+            if (Math.abs(p.getLatitude() - lat) < 1e-7 &&
+                    Math.abs(p.getLongitude() - lon) < 1e-7) {
+                return p;
+            }
+        }
+        return new Coordenadas(lat, lon); // fallback (quase nunca usado)
+    }
 
     /**
      * ponto crítico, ajustar dps para threads
