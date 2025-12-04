@@ -1,8 +1,10 @@
 package com.example.javaexpress.service.ChatBot.tools;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Component;
 import java.io.IOException;
+
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class JsonParser {
@@ -26,4 +28,5 @@ public class JsonParser {
         }
         return null;
     }
+    
 }
