@@ -4,6 +4,7 @@ package com.example.javaexpress.model.model;
 public class Coordenadas {
     private double latitude;
     private double longitude;
+    private int id;
 
     public Coordenadas() {
     }
@@ -28,4 +29,8 @@ public class Coordenadas {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    public int getId() {return id;}
+
+    public void setId(int id) {this.id = id;}
 }

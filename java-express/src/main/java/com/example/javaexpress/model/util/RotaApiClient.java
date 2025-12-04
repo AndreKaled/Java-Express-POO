@@ -10,6 +10,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +26,18 @@ public class RotaApiClient {
     private long ultimaChamada = 0;
     private static final long INTERVALO_MINIMO_MS = 1500; // 1.5s por chamada
 
+    public static class DistanciaMatrizResposta {
+        public double[][] distancias;
+        public double[] snapped;
+    }
 
-    public double[][] getDistanciaMatriz(List<Coordenadas> pontos){
+    public DistanciaMatrizResposta getDistanciaMatriz(List<Coordenadas> pontos){
         String url = URL_BASE + "matrix/driving-car";
 
         Map<String, Object> body = new HashMap<>();
-        List<List<Double>> coords = pontos.stream().map(p -> List.of(p.getLongitude(), p.getLatitude())).toList(); //osr usa lon/lat
+        List<List<Double>> coords = pontos.stream()
+                .map(p -> List.of(p.getLongitude(), p.getLatitude()))
+                .toList();
         body.put("locations", coords);
         body.put("metrics", List.of("distance"));
 
@@ -39,24 +46,33 @@ public class RotaApiClient {
         headers.set("Content-Type", "application/json");
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
         try {
             respeitarRateLimit();
             Map<String, Object> response = restTemplate.postForObject(url, entity, Map.class);
-            System.out.println("Resposta da API: " + response);
-            if(response == null || !response.containsKey("distances")){
-                throw new RuntimeException("Resposta inválida da API OpenRouteService");
-            }
-            //pega e converte matriz de distancias
+
             List<List<Double>> distancias = (List<List<Double>>) response.get("distances");
-            return distancias.stream().map(list -> list.stream()
-                            .mapToDouble(Double::doubleValue)
-                            .toArray())
+            List<Map<String, Object>> sources = (List<Map<String, Object>>) response.get("sources");
+
+            double[][] matriz = distancias.stream()
+                    .map(row -> row.stream().mapToDouble(Double::doubleValue).toArray())
                     .toArray(double[][]::new);
-        }catch (HttpClientErrorException | HttpServerErrorException e){
-            System.err.println("Erro HTTP " +e.getStatusCode() +":" +e.getResponseBodyAsString());
-            return new double[0][0];
+
+            double[] snapped = sources.stream()
+                    .mapToDouble(s -> ((Number)s.get("snapped_distance")).doubleValue())
+                    .toArray();
+
+            DistanciaMatrizResposta resp = new DistanciaMatrizResposta();
+            resp.distancias = matriz;
+            resp.snapped = snapped;
+            return resp;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
+
 
     public Rota getRota(List<Coordenadas> pontos) {
         String url = URL_BASE + "directions/driving-car/geojson";
@@ -82,9 +98,12 @@ public class RotaApiClient {
             // converter coordenadas de volta pra lista de objetos
             Map<String, Object> geometry = (Map<String, Object>) features.get("geometry");
             List<List<Double>> coordsResposta = (List<List<Double>>) geometry.get("coordinates");
-            List<Coordenadas> coordenadas = coordsResposta.stream()
-                    .map(c -> new Coordenadas(c.get(1), c.get(0))) // volta pra lat/lon
-                    .toList();
+            List<Coordenadas> coordenadas = new ArrayList<>();
+            for (List<Double> c : coordsResposta) {
+                Coordenadas original = encontrarOriginal(pontos, c.get(1), c.get(0));
+                coordenadas.add(original);
+            }
+
 
             return new Rota(coordenadas, distancia);
         } catch (Exception e) {
@@ -93,6 +112,15 @@ public class RotaApiClient {
         }
     }
 
+    private Coordenadas encontrarOriginal(List<Coordenadas> originais, double lat, double lon) {
+        for (Coordenadas p : originais) {
+            if (Math.abs(p.getLatitude() - lat) < 1e-7 &&
+                    Math.abs(p.getLongitude() - lon) < 1e-7) {
+                return p;
+            }
+        }
+        return new Coordenadas(lat, lon); // fallback (quase nunca usado)
+    }
 
     /**
      * ponto crítico, ajustar dps para threads
