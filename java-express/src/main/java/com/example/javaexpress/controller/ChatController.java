@@ -2,10 +2,8 @@ package com.example.javaexpress.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 
 import com.example.javaexpress.model.model.ChatRequest;
@@ -13,7 +11,7 @@ import com.example.javaexpress.model.model.ChatResponse;
 
 import com.example.javaexpress.service.ChatBot.ChatBotService;
 
-@RestController 
+@Controller
 @RequestMapping("/api/chat") 
 public class ChatController {
 
@@ -26,6 +24,7 @@ public class ChatController {
     }
 
     @PostMapping
+    @ResponseBody
     public ResponseEntity<ChatResponse> sendMessage(@RequestBody ChatRequest request) {
         String mensagemUsuario = request.getMensagem();
         String respostaDoBot = chatbotService.gerarResposta(mensagemUsuario);
@@ -36,4 +35,14 @@ public class ChatController {
         
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Isso retorna um micro-html para anexar em alguma div no frontend,
+     * mostra um chat e faz requests para o chatbot
+     * */
+    @GetMapping
+    public String chat() {
+        return "main_chat";
+    }
+
 }
