@@ -4,6 +4,7 @@ import com.example.javaexpress.model.enums.Feedback;
 import com.example.javaexpress.model.enums.StatusEncomenda;
 import com.example.javaexpress.model.enums.TipoReclamacao;
 import com.example.javaexpress.model.model.*;
+import com.example.javaexpress.model.util.Validate;
 import com.example.javaexpress.service.ClienteService;
 import com.example.javaexpress.service.EncomendaService;
 import com.example.javaexpress.service.ReclamacaoService;
@@ -99,4 +100,12 @@ public class JavaExpressApplication {
             e.printStackTrace();
         }
     }
+}
+        testeValidacoes();
+    }
+
+    public static void testeValidacoes() {
+        //mete os testes ae usando a classe Validate
+    }
+
 }
