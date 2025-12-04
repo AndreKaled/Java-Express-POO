@@ -17,11 +17,9 @@ public class JsonParser {
         try {
             return objectMapper.readValue(jsonString, FuncaoChamadaDTO.class);
         } catch (IOException e) {
-            // Se falhar (não é um JSON de função), retorna nulo.
             return null; 
         }
     }
-
     public String extrairParametro(FuncaoChamadaDTO chamada, String nomeParametro) {
         if (chamada != null && chamada.getParametros() != null) {
             return chamada.getParametros().get(nomeParametro);
