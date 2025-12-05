@@ -34,23 +34,12 @@
             L.marker([lat, lng]).addTo(map);
         });
 
-        async function salvarPontos() {
-            if (pontos.length === 0) {
-                alert("Nenhum ponto marcado!");
-                return;
-            }
-
-            await fetch('/api/rota/salvar-pontos', {
+        async function otimizarRota() {
+            const resp = await fetch('/api/rota/otimizar', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(pontos)
             });
-
-            alert("Pontos salvos!");
-        }
-
-        async function otimizarRota() {
-            const resp = await fetch('/api/rota/otimizar');
             const rota = await resp.json();
 
             if (!rota || !rota.coordenadas) {
