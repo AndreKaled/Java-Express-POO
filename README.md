@@ -14,5 +14,6 @@ Depois que o programa finalizar, execute:
 
 O projeto estará rodando e você pode usar no navegador...
 
-## Endpoints
-blabla
+## Endpoints visíveis
+/mapa
+/api/chat
