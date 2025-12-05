@@ -16,4 +16,5 @@ O projeto estará rodando e você pode usar no navegador...
 
 ## Endpoints visíveis
 /mapa
+
 /api/chat
